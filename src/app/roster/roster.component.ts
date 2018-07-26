@@ -20,7 +20,7 @@ export class RosterComponent implements OnInit {
   private displayedServices: Service []; //used to display all services within the current page
   private displayedColumns: string[];
   private editingEnabled: boolean;
-  private pageSize: number = 10;
+  private pageSize: number = 13;
   private pageIndex : number = 0;
   private selectedRows: number [];
 
@@ -35,15 +35,20 @@ export class RosterComponent implements OnInit {
     this.displayedColumns = Object.getOwnPropertyNames(new Service('','','',''));
     this.editingEnabled = false;
     this.selectedRows = [];
+    this.services = [];
   }
 
   ngOnInit() {
+    //TODO: add TokenInterceptor (implements HttpInterceptor) to set the token and handle the 401
     this.rosterService.getRoster().subscribe(roster => {
       this.title = roster.title;
       this.services = roster.serviceList;
       this.backupServices = this.services.slice(0);
       this.displayedServices = this.services.slice(0, this.pageSize);
-    });
+    },
+    error => {
+      console.log("could not fetch roster from the server");
+  });
 
     this.paginator.page.subscribe(page => {
       this.pageIndex = page.pageIndex;

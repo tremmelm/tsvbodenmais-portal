@@ -47,6 +47,10 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material';
+import { LoginComponent } from './login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   exports: [
@@ -95,17 +99,22 @@ export class MaterialModule {}
   declarations: [
     AppComponent,
     RosterComponent,
-    PhonelistComponent
+    PhonelistComponent,
+    LoginComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
-    FormsModule,
     AppRoutingModule,
+    HttpClientModule,
     MaterialModule,
     MatNativeDateModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
