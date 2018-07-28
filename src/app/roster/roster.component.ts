@@ -7,6 +7,9 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { RouterStateSnapshot } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-roster',
@@ -31,7 +34,7 @@ export class RosterComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private zone: NgZone, private rosterService: RosterService, private cd: ChangeDetectorRef) {
+  constructor(private zone: NgZone, private rosterService: RosterService, private cd: ChangeDetectorRef, private router: Router) {
     this.displayedColumns = Object.getOwnPropertyNames(new Service('','','',''));
     this.editingEnabled = false;
     this.selectedRows = [];
@@ -47,6 +50,7 @@ export class RosterComponent implements OnInit {
       this.displayedServices = this.services.slice(0, this.pageSize);
     },
     error => {
+      this.router.navigate(['/login']);
       console.log("could not fetch roster from the server");
   });
 
@@ -67,6 +71,7 @@ export class RosterComponent implements OnInit {
 
   private saveRoster(){
     this.editingEnabled = false;
+
     this.services = this.services.sort((service1, service2)=> {
       if(!service1.date)
       {
@@ -84,6 +89,10 @@ export class RosterComponent implements OnInit {
       console.log(diff);
       return diff;
     });
+
+    //TODO: handle error
+    this.rosterService.saveRoster(new Roster(this.title, this.services)).subscribe();
+
     this.displayedColumns = Object.getOwnPropertyNames(new Service('','','',''));
     this.backupServices = this.services.slice(0);
   }

@@ -10,7 +10,8 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class RosterService {
 
-  private rosterServiceUrl = 'http://localhost:8081/getRoster';
+  private getRosterServiceUrl = 'http://localhost:8081/getRoster';
+  private saveRosterServiceUrl = 'http://localhost:8081/updateRoster';
 
   constructor(private http: HttpClient) { }
 
@@ -22,11 +23,17 @@ export class RosterService {
       })
     };
     
-    return this.http.get(this.rosterServiceUrl, httpOptions);
+    return this.http.get(this.getRosterServiceUrl, httpOptions);
   }
 
-  public saveRoster(roster : Roster) : void{
- 
+  public saveRoster(roster : Roster) : Observable<any>{
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'authorization':  `Bearer ${localStorage.getItem('token')}`
+      })
+    };
+    
+    return this.http.post(this.saveRosterServiceUrl, roster, httpOptions);
   }
 
 }
